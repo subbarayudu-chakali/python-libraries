@@ -153,8 +153,6 @@ def generate_payslip(file_path):
     # Net salary
     net_salary_text = f"<b>Net Salary (A-B):</b>" + str(net_salary)
     content.append(Paragraph(net_salary_text, styles['Normal']))
-
-
     doc.build(content)
 
 # Replace 'payslip.pdf' with the desired PDF file name

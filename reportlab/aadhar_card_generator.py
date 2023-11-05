@@ -1,46 +1,32 @@
-from reportlab.lib import colors
+from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 
-def generate_aadhar_card(file_path, name, dob, gender, address, aadhar_number, mobile_number, photo_path) :
-    doc = SimpleDocTemplate(file_path, pagesize=letter)
-    styles = getSampleStyleSheet()
+def create_pdf():
+    # Create a PDF document
+    pdf_path = "output.pdf"
+    c = canvas.Canvas(pdf_path, pagesize=letter)
 
-    # # Add a logo
-    # logo = Image("logo.png")
-    # logo.drawHeight = 0.5 * inch
-    # logo.drawWidth = 0.5 * inch
-    # logo.hAlign = "LEFT"
-    # logo.vAlign = "TOP"
+    # Define the image path and rectangle coordinates
+    image_path = "company-name.png"
+    rect_x, rect_y = 10, 580
+    rect_width, rect_height = 300, 200
 
-    # Add the name
-    name_paragraph = Paragraph(name, styles["Normal"])
+    # Draw the rectangle
+    c.rect(rect_x, rect_y, rect_width, rect_height, stroke=1, fill=0 )
 
-    # Add the DOB
-    dob_paragraph = Paragraph(dob, styles["Normal"])
+    # Draw the image inside the rectangle
+    c.drawImage(image_path, rect_x, rect_y, width=rect_width, height=rect_height)
 
-    # Add the gender
-    gender_paragraph = Paragraph(gender, styles["Normal"])
+    # Add text on top of the image
+    text = "Hello, this is text on top of the image!"
+    text_x, text_y = rect_x + 20, rect_y + rect_height - 40
+    c.setFont("Helvetica", 12)
+    c.drawString(text_x, text_y, text)
 
-    # Add the address
-    address_paragraph = Paragraph(address, styles["Normal"])
+    # Save the PDF
+    c.save()
 
-    # Add the Aadhar number
-    aadhar_number_paragraph = Paragraph(aadhar_number, styles["Normal"])
 
-    # Add the mobile number
-    mobile_number_paragraph = Paragraph(mobile_number, styles["Normal"])
-    # Add the photo
-    photo = Image(photo_path)
-    photo.drawHeight = 1.5 * inch
-    photo.drawWidth = 1.5 * inch
-    photo.hAlign = "CENTER"
-    photo.vAlign = "TOP"
-
-    # Add the content
-    content = [name_paragraph, dob_paragraph, gender_paragraph, address_paragraph, aadhar_number_paragraph, mobile_number_paragraph, photo]
-    doc.build(content)
-generate_aadhar_card("aadhar_card.pdf", "John Doe", "01/01/2000", "Male", "123 Main St", "8479", "1234567890", "company-name.png")
+# Call the function to create the PDF
+create_pdf()
